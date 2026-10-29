@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCA Concept Home</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@200;500;700&family=IBM+Plex+Sans:wght@300;400;600&family=Overpass+Mono:wght@300;400;500;700&display=swap">
+<style>
+/* Layout concept: Figma desktop frame (1440) scaled fluidly. 1rem = 100 design px, so .54rem = 54px at 1440 wide. */
+:root{
+  --ink:#1c1f26; --navy:#293952; --cream:#fff2d2; --orange:#e84826; --stone:#e5e2da; --grey:#6b7280; --white:#ffffff; --bg:#ffffff;
+  --f-disp:'Barlow Condensed','Arial Narrow',sans-serif;
+  --f-body:'IBM Plex Sans',system-ui,sans-serif;
+  --f-mono:'Overpass Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.65,0,.35,1);
+  --out:cubic-bezier(.16,1,.3,1);
+}
+html{font-size:calc(100vw / 14.4);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:.14rem;overflow-x:clip;-webkit-font-smoothing:antialiased}
+*,*::before,*::after{box-sizing:border-box}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+
+/* shared */
+.disp{font-family:var(--f-disp);font-weight:700;text-transform:uppercase;font-size:.54rem;line-height:.54rem}
+.abs{position:absolute}
+.img{position:relative;background:var(--ph,#b9b5a8) center/cover no-repeat}
+.img.has{background-color:transparent}
+.img:not(.has)::after{content:attr(data-src);position:absolute;left:.1rem;bottom:.08rem;font:400 .11rem var(--f-mono);color:rgba(255,255,255,.75);letter-spacing:.02em}
+.img.nolabel::after{display:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:.36rem;padding:0 .15rem;border:1px solid currentColor;font:500 .12rem/1.4 var(--f-mono);letter-spacing:-.02em;text-transform:uppercase;color:var(--ink);background:transparent;text-decoration:none;white-space:nowrap;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.btn:hover{background:var(--ink);color:var(--white)}
+.btn--navy{color:var(--navy)}
+.btn--navy:hover{background:var(--navy)}
+.btn--cream{color:var(--cream)}
+.btn--cream:hover{background:var(--cream);color:var(--ink)}
+
+/* reveal helper (only active when JS runs) */
+.js .rv{opacity:0;transform:translateY(.18rem);transition:opacity .9s var(--out),transform .9s var(--out);transition-delay:calc(var(--d,0) * 1ms)}
+.js .on .rv,.js .rv.on{opacity:1;transform:none}
+
+/* ---------- NAV + HERO ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:0 .4rem;pointer-events:none;transition:transform .6s var(--ease)}
+.nav.is-away{transform:translateY(-140%)}
+.nav__panel{pointer-events:auto;position:relative;margin-top:.27rem;height:3.61rem;background:var(--ink);overflow:hidden;transition:height .75s var(--ease),margin-top .75s var(--ease)}
+.nav.is-compact .nav__panel{height:.62rem;margin-top:.12rem}
+.nav__row{position:absolute;top:0;left:0;right:0;height:.62rem;display:flex;align-items:center;justify-content:space-between;padding:0 .26rem 0 .08rem;z-index:2}
+.logo{display:block;width:1.38rem;height:.43rem;text-decoration:none;color:var(--white);background-size:contain;background-repeat:no-repeat;background-position:left center}
+.logo__txt{font:700 .3rem/.43rem var(--f-disp);letter-spacing:.06em}
+.logo.has .logo__txt{display:none}
+.logo.img::after{display:none}
+.nav__links{display:flex;gap:.52rem}
+.nav__links a{font:400 .12rem/1.4 var(--f-body);letter-spacing:.02em;text-transform:uppercase;color:var(--white);text-decoration:none;position:relative}
+.nav__links a::after{content:"";position:absolute;left:0;right:0;bottom:-.04rem;height:1px;background:var(--cream);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--out)}
+.nav__links a:hover::after{transform:scaleX(1)}
+.nav__h,.nav__p,.nav__btn,.nav__topo{transition:opacity .35s}
+.nav.is-compact .nav__h,.nav.is-compact .nav__p,.nav.is-compact .nav__btn,.nav.is-compact .nav__topo{opacity:0;pointer-events:none}
+.nav__topo{position:absolute;right:0;bottom:0;width:4.02rem;height:3.05rem;display:block;pointer-events:none}
+.nav__h{position:absolute;left:.25rem;top:1.44rem;width:9.93rem;font:700 .64rem/.64rem var(--f-disp);text-transform:uppercase;color:var(--cream)}
+.nav__p{position:absolute;left:.25rem;top:2.89rem;width:7.49rem;font:300 .18rem/1.4 var(--f-body);color:var(--white)}
+.nav__btn{position:absolute;right:.26rem;top:2.97rem}
+
+.hero{position:relative;height:100vh;height:100svh;min-height:5rem;overflow:hidden;--ph:linear-gradient(180deg,#3b4636 0%,#8b5a2b 42%,#c0702a 58%,#33402b 100%)}
+.hero__bg{position:absolute;inset:0;background-position:center bottom}
+.hero__bg.has{background-image:var(--bg-img)}
+.hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.15);pointer-events:none}
+
+/* ---------- HOW WE HELP + CTA (static, topography from the frame) ---------- */
+.how{position:relative;height:12.76rem;background:var(--white);overflow:clip}
+.how__topo{position:absolute;left:0;top:0;width:14.39rem;height:12.79rem;display:block;pointer-events:none}
+.box{position:absolute;background:var(--white);border:1px solid rgba(107,114,128,.4)}
+.how__a{left:0;top:0;width:4.88rem;height:3.99rem}
+.how h2{left:.4rem;top:.64rem}
+.how__p{left:.42rem;top:1.33rem;width:3.96rem;font:300 .18rem/1.4 var(--f-body)}
+.how__p+.how__p{margin-top:.1rem}
+.how__btn{left:.4rem;top:2.89rem}
+.cell{position:absolute;width:4.63rem}
+.cell h3{position:absolute;left:.25rem;font:500 .32rem/.38rem var(--f-disp);text-transform:capitalize}
+.cell p{position:absolute;left:.25rem;width:2.71rem;font:300 .14rem/1.4 var(--f-body)}
+.cell .ph{position:absolute;left:3.04rem;width:1.32rem;overflow:hidden}
+.cell .ph .img{position:absolute;inset:0;transition:transform .9s var(--out)}
+.cell:hover .ph .img{transform:scale(1.06)}
+.c1{left:4.88rem;top:3.98rem;height:1.73rem}
+.c2{left:4.88rem;top:5.695rem;height:1.975rem}
+.c3{left:9.5rem;top:3.98rem;height:1.73rem}
+.c4{left:9.5rem;top:5.695rem;height:1.975rem}
+.c1 h3,.c3 h3{top:.19rem}.c1 p,.c3 p{top:.69rem}
+.c1 .ph,.c3 .ph{top:.25rem;height:1.19rem}
+.c2 h3{top:.225rem}.c2 p{top:1.075rem;width:2.51rem}.c2 .ph{top:.285rem;height:1.39rem}
+.c4 h3{top:.215rem}.c4 p{top:.715rem;width:2.51rem}.c4 .ph{top:.275rem;height:1.4rem}
+.c3 h3,.c3 p,.c4 h3,.c4 p{left:.23rem}
+.c3 p{width:2.51rem}
+.c3 .ph,.c4 .ph{left:3.02rem}
+.plus{position:absolute;z-index:3;pointer-events:none}
+.plus::before,.plus::after{content:"";position:absolute;background:var(--orange)}
+.plus::before{left:50%;top:0;bottom:0;width:1.5px;transform:translateX(-50%)}
+.plus::after{top:50%;left:0;right:0;height:1.5px;transform:translateY(-50%)}
+.plus--lg{left:4.88rem;top:3.98rem;width:.43rem;height:.43rem;margin:-.215rem 0 0 -.215rem}
+.plus--sm{left:9.5rem;top:5.705rem;width:.15rem;height:.15rem;margin:-.075rem 0 0 -.075rem}
+
+.cta{position:absolute;left:0;top:8.45rem;width:14.4rem;height:3.87rem}
+.cta__bg{left:.4rem;top:0;width:13.6rem;height:3.87rem;background:var(--cream)}
+.cta h2{left:.82rem;top:.31rem;width:7.43rem}
+.cta h2 span{font-weight:200}
+.cta__rule{left:.83rem;top:2.55rem;width:7.42rem;height:1px;background:var(--ink)}
+.js .cta__rule{transform:scaleX(0);transform-origin:left;transition:transform 1.2s var(--ease) .3s}
+.js .cta.on .cta__rule{transform:scaleX(1)}
+.cta__p{left:.83rem;top:2.72rem;width:5.86rem;font:400 .18rem/1.4 var(--f-body)}
+.cta__btn{left:7.24rem;top:2.77rem}
+.cta__photo{left:8.69rem;top:0;width:5.31rem;height:3.87rem;overflow:hidden}
+.cta__photo .img{position:absolute;inset:0}
+.js .cta__photo{clip-path:inset(0 100% 0 0);transition:clip-path 1.2s var(--ease) 1.1s}
+.js .cta__photo .img{transform:scale(1.18);transform-origin:left center;transition:transform 1.8s var(--out) 1.1s}
+.js .cta.on .cta__photo{clip-path:inset(0)}
+.js .cta.on .cta__photo .img{transform:none}
+
+/* ---------- IMPACT (normal scroll, animation plays as it enters) ---------- */
+.impact{position:relative;height:9.55rem;background:var(--navy);color:var(--white);overflow:clip}
+.impact h2{left:.4rem;top:.96rem}
+.vline{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.24)}
+.js .vline{transform:scaleY(0);transform-origin:bottom;transition:transform .8s var(--out);transition-delay:calc(var(--d) * 1ms)}
+.js .impact.on .vline{transform:scaleY(1)}
+.bar{position:absolute;bottom:0;width:2.3rem;background:var(--ink)}
+.js .bar{clip-path:inset(100% 0 0 0);transition:clip-path .85s var(--ease);transition-delay:calc(var(--d) * 1ms)}
+.js .impact.on .bar{clip-path:inset(0 0 0 0)}
+.bar__n{position:absolute;left:.2rem;top:.14rem;font:700 .64rem/1 var(--f-disp);color:var(--orange);text-transform:uppercase;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar__l{position:absolute;left:.2rem;top:.93rem;font:500 .18rem/1.3 var(--f-mono);text-transform:uppercase}
+.bar__d{position:absolute;left:.2rem;bottom:.51rem;width:1.52rem;font:400 .14rem/1.3 var(--f-body)}
+.js .bar__n,.js .bar__l,.js .bar__d{opacity:0;transition:opacity .6s var(--out);transition-delay:calc((var(--d) + 350) * 1ms)}
+.js .impact.on .bar__n,.js .impact.on .bar__l,.js .impact.on .bar__d{opacity:1}
+.js .bar__l{transition-delay:calc((var(--d) + 520) * 1ms)}
+.js .bar__d{transition-delay:calc((var(--d) + 700) * 1ms)}
+
+/* ---------- PROJECTS ---------- */
+.proj{--q:1rem;position:relative;height:10.46rem;background:var(--white);overflow:hidden}
+.proj h2{left:.4rem;top:1.11rem}
+.proj__vp{position:absolute;left:.4rem;top:2.42rem;right:0}
+.proj__track{display:flex;width:max-content;transition:transform .9s var(--ease)}
+.pc{position:relative;width:calc(3.78 * var(--q));margin-right:-1px;padding-top:calc(.31 * var(--q))}
+.pc__meta{position:absolute;left:0;top:0;height:calc(.32 * var(--q));display:flex;align-items:stretch;background:var(--white);border:1px solid rgba(107,114,128,.5);font:400 calc(.14 * var(--q))/1 var(--f-mono);letter-spacing:-.02em;text-transform:uppercase;z-index:2}
+.pc__meta span{display:flex;align-items:center;padding:0 calc(.2 * var(--q));white-space:nowrap}
+.pc__meta span:first-child{padding-left:calc(.17 * var(--q))}
+.pc__meta span:last-child{padding-right:calc(.17 * var(--q))}
+.pc__meta span+span{border-left:1px solid rgba(107,114,128,.5)}
+.pc__card{position:relative;height:calc(5.53 * var(--q));background:var(--white);border:1px solid rgba(107,114,128,.5);padding:calc(.16 * var(--q)) calc(.17 * var(--q)) 0;cursor:pointer}
+.pc__frame{width:calc(3.43 * var(--q));aspect-ratio:343/201;overflow:hidden}
+.pc__frame .img{width:100%;height:100%;transition:transform .9s var(--out)}
+.pc__card:hover .pc__frame .img{transform:scale(1.09)}
+.pc__card h3{margin-top:calc(.11 * var(--q));font:600 calc(.26 * var(--q))/1.4 var(--f-body)}
+.pc__stat{margin-top:calc(.14 * var(--q));height:calc(.448 * var(--q));font:300 calc(.16 * var(--q))/1.4 var(--f-mono);text-transform:uppercase}
+.pc__stat b{font-weight:700;color:var(--orange)}
+.pc__card p{margin-top:calc(.14 * var(--q));width:calc(2.85 * var(--q));font:300 calc(.14 * var(--q))/1.4 var(--f-body)}
+.pc__card .btn{position:absolute;left:calc(.17 * var(--q));bottom:calc(.185 * var(--q))}
+.pc__card:hover .btn{background:var(--ink);color:var(--white)}
+.proj__pager{position:absolute;left:0;right:0;top:8.55rem;display:flex;justify-content:center;align-items:center;gap:.2rem;font:400 .16rem/1 var(--f-mono)}
+.arrow{width:.4rem;height:.3rem;border:0;background:none;padding:0;color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:transform .25s var(--out),opacity .25s}
+.arrow svg{width:.28rem;height:.12rem;overflow:visible}
+.arrow:hover{transform:translateX(.04rem)}
+.arrow--prev:hover{transform:translateX(-.04rem)}
+.arrow[disabled]{opacity:.25;cursor:default;transform:none}
+.proj__all{position:absolute;left:50%;top:9.09rem;transform:translateX(-50%)}
+
+/* ---------- NEWS ---------- */
+.news{position:relative;height:15.98rem;background:var(--stone);overflow:hidden}
+.news__topo{position:absolute;left:0;top:0;width:14.4rem;height:15.98rem;display:block;opacity:.2;pointer-events:none}
+.news h2{left:.4rem;top:.9rem}
+.shot{position:absolute;background:url("assets/news.webp") no-repeat;background-size:10.28rem auto}
+.s1{left:2.06rem;top:1.82rem;width:10.28rem;height:8.87rem;background-position:0 0}
+.s2{left:2.17rem;top:8.38rem;width:3.3rem;height:6.09rem;background-position:-.11rem -6.55rem}
+.s3{left:5.57rem;top:6.5rem;width:3.3rem;height:4.48rem;background-position:-3.506rem -4.674rem}
+.s4{left:8.97rem;top:8.36rem;width:3.3rem;height:5.21rem;background-position:-6.919rem -6.541rem}
+.news__btn{position:absolute;left:50%;top:15.05rem;transform:translateX(-50%)}
+
+/* ---------- FOOTER ---------- */
+.foot{position:relative;height:4.52rem;background:var(--white);overflow:clip}
+.foot .ln{position:absolute;background:rgba(28,31,38,.55)}
+.foot .h{height:1px}.foot .v{width:1px}
+.badge{left:.4rem;top:.34rem;width:1.26rem;height:1.26rem;border-radius:50%;--ph:radial-gradient(circle,#1c1f26 0 40%,#e84826 41% 46%,#fff2d2 47% 52%,#293952 53% 100%)}
+.foot__t{font:700 .32rem/.32rem var(--f-disp);text-transform:uppercase}
+.foot p{font:400 .14rem/1.4 var(--f-body)}
+.foot .lbl{font:500 .14rem/1.3 var(--f-mono);letter-spacing:-.02em;text-transform:uppercase}
+.fld{position:absolute;display:block}
+.fld input,.fld textarea{display:block;width:100%;border:0;border-bottom:1px solid rgba(28,31,38,.55);background:transparent;padding:0;font:400 .14rem/1.3 var(--f-body);color:var(--ink);border-radius:0;outline:none;resize:none}
+.fld input{height:.3rem}
+.fld textarea{height:.58rem}
+.fld input:focus,.fld textarea:focus{border-bottom-color:var(--orange)}
+.fld span{display:block;margin-top:.04rem;font:400 .12rem/1.3 var(--f-body);color:var(--grey)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important;transition-delay:0s!important}
+}
+</style>
+
+</head>
+<body>
+<header class="nav" id="nav">
+  <div class="nav__panel">
+    <img class="nav__topo" src="assets/topo/head.svg" alt="" width="402" height="305">
+    <div class="nav__row">
+      <a class="logo img" href="#top" data-src="assets/logo.png" aria-label="OCA home"><span class="logo__txt">OCA</span></a>
+      <nav class="nav__links" aria-label="Main">
+        <a href="#top">Who We Are</a>
+        <a href="#help">What We Do</a>
+        <a href="#help">How We Can Help</a>
+        <a href="#projects">Projects</a>
+        <a href="#connect">Support Conversation</a>
+      </nav>
+    </div>
+    <h1 class="nav__h">Turning conservation opportunities into real action</h1>
+    <p class="nav__p">We accelerate conservation across Ontario by bringing together the partnerships, funding, expertise and innovative approaches needed to protect and steward natural landscapes.</p>
+    <a class="btn btn--cream nav__btn" href="#help">Learn more</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="hero">
+    <div class="hero__bg img" data-src="assets/hero.jpg" data-bg="1"></div>
+  </section>
+
+  <section class="how" id="help">
+    <img class="how__topo" src="assets/topo/main.svg" alt="" width="1439" height="1279">
+
+    <div class="box how__a"></div>
+    <h2 class="disp abs">How We Help</h2>
+    <p class="how__p abs">We help partners set priorities, protect what matters most and turn plans into action.</p>
+    <p class="how__p abs" style="top:1.9rem">By bringing together the right people, expertise, relationships and funding, we overcome barriers and move quickly to deliver conservation at scale.</p>
+    <a class="btn btn--navy how__btn abs" href="#">Learn more</a>
+
+    <div class="box cell c1">
+      <h3>Invest for impact</h3>
+      <p>Direct your funding to strong conservation opportunities, backed by deep expertise and trusted partners, with greater efficiency, confidence and accountability.</p>
+      <div class="ph"><div class="img" data-src="assets/h1.jpg" style="--ph:#8a9a7b"></div></div>
+    </div>
+    <div class="box cell c2">
+      <h3>Community-led<br>conservation</h3>
+      <p>Advance your community’s priorities, with the funding, guidance and partners to support conservation on your terms.</p>
+      <div class="ph"><div class="img" data-src="assets/h3.jpg" style="--ph:#9a8f78"></div></div>
+    </div>
+    <div class="box cell c3">
+      <h3>Move projects forward</h3>
+      <p>Find a practical path forward for your land or project, with the expertise, financing and relationships to work through roadblocks.</p>
+      <div class="ph"><div class="img" data-src="assets/h2.jpg" style="--ph:#7d8f93"></div></div>
+    </div>
+    <div class="box cell c4">
+      <h3>Action priorities</h3>
+      <p>Turn conservation mandates into on-the-ground results with a delivery partner that brings ready opportunities, cross-sector collaboration and practical new solutions.</p>
+      <div class="ph"><div class="img" data-src="assets/h4.jpg" style="--ph:#6f8570"></div></div>
+    </div>
+    <div class="plus plus--lg"></div>
+    <div class="plus plus--sm"></div>
+
+    <div class="cta" id="connect" data-at=".6">
+      <div class="cta__bg abs"></div>
+      <h2 class="disp abs rv" style="--d:0">Have a conservation opportunity in mind? <span>Let’s explore what's possible, together.</span></h2>
+      <div class="cta__rule abs"></div>
+      <p class="cta__p abs rv" style="--d:450">Whether you’re looking to invest, have a conservation opportunity or aren’t sure what comes next for your project, our team will take the time to understand your goals and work with you to find the way forward.</p>
+      <a class="btn cta__btn abs rv" style="--d:600" href="#">Connect</a>
+      <div class="cta__photo abs"><div class="img" data-src="assets/cta.jpg" style="--ph:#a89c84"></div></div>
+    </div>
+  </section>
+
+  <section class="impact" id="impact" data-at=".5">
+    <h2 class="disp abs rv" style="--d:0;color:#fff">Our<br>Impact</h2>
+    <div class="vline" style="left:2.6rem;--d:0"></div>
+    <div class="vline" style="left:4.9rem;--d:100"></div>
+    <div class="vline" style="left:7.2rem;--d:200"></div>
+    <div class="vline" style="left:9.5rem;--d:300"></div>
+    <div class="vline" style="left:11.8rem;--d:400"></div>
+
+    <div class="bar" style="left:2.6rem;height:6.8rem;--d:550">
+      <div class="bar__n" data-to="15.5" data-dec="1" data-pre="$" data-suf="M">$15.5M</div>
+      <div class="bar__l" style="width:1.7rem">Multi-year private funding secured</div>
+      <div class="bar__d">Flexible, committed capital for conservation in OCA's first full year.</div>
+    </div>
+    <div class="bar" style="left:4.9rem;height:7.17rem;--d:670">
+      <div class="bar__n" data-to="25511">25,511</div>
+      <div class="bar__l" style="width:1.82rem">Acres of Crown land added to provincial parks</div>
+      <div class="bar__d">27 properties, with another 31,000 acres in consultation.</div>
+    </div>
+    <div class="bar" style="left:7.2rem;height:7.53rem;--d:790">
+      <div class="bar__n" data-to="5000" data-suf="+">5,000+</div>
+      <div class="bar__l" style="width:1.7rem">Acres protected</div>
+      <div class="bar__d">22 projects closed with $3.1M invested, leveraging over $14M.</div>
+    </div>
+    <div class="bar" style="left:9.5rem;height:7.89rem;--d:910">
+      <div class="bar__n" data-to="100" data-suf="+">100+</div>
+      <div class="bar__l" style="width:1.82rem">Organizations connected</div>
+      <div class="bar__d">Land trusts, governments and partners across Ontario.</div>
+    </div>
+  </section>
+
+  <section class="proj" id="projects">
+    <h2 class="disp abs rv" style="--d:0">Featured Projects</h2>
+    <div class="proj__vp">
+      <div class="proj__track" id="track">
+        <article class="pc rv" style="--d:100">
+          <div class="pc__meta"><span>Active</span><span>OCA Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p1.jpg" style="--ph:#6d8a7a"></div></div>
+            <h3>Scouts Canada</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>With programming rooted in adventure, leadership, and community, Scouts Canada provides transformative learning experiences for youth through outdoor experiential education, and service.</p>
+            <a class="btn" href="#">Read more</a>
+          </div>
+        </article>
+        <article class="pc rv" style="--d:220">
+          <div class="pc__meta"><span>Active</span><span>OCA Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p2.jpg" style="--ph:#7f8f6a"></div></div>
+            <h3>Crowe River</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>Crowe River property is part of a growing network of protected areas and helps build the spine of a key north-south conservation corridor.</p>
+            <a class="btn" href="#">Read more</a>
+          </div>
+        </article>
+        <article class="pc rv" style="--d:340">
+          <div class="pc__meta"><span>Completed</span><span>Oct 23, 2024</span><span>OCA Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p3.jpg" style="--ph:#4f8a8c"></div></div>
+            <h3>Land’escapes</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>Located just south of Bancroft, Ontario, the Land’escapes property spans an extraordinary 26,300 acres.</p>
+            <a class="btn" href="#">Read more</a>
+          </div>
+        </article>
+        <article class="pc rv" style="--d:460">
+          <div class="pc__meta"><span>Completed</span><span>April 2025</span><span>Partner Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p4.jpg" style="--ph:#8f9a73"></div></div>
+            <h3>Biddy Creek Wetland</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>Led by the Northumberland Land Trust (NLT), supported by OCA, the Biddy Creek Wetland is a vibrant 123-hectare natural haven in Brighton, Ontario, teeming with rich biodiversity and important habitats.</p>
+            <a class="btn" href="#">Read more</a>
+          </div>
+        </article>
+        <article class="pc rv" style="--d:580">
+          <div class="pc__meta"><span>Active</span><span>OCA Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p1.jpg" style="--ph:#6d8a7a"></div></div>
+            <h3>Scouts Canada</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>With programming rooted in adventure, leadership, and community, Scouts Canada provides transformative learning experiences for youth through outdoor experiential education, and service.</p>
+            <a class="btn" href="#">Read more</a>
+          </div>
+        </article>
+        <article class="pc rv" style="--d:700">
+          <div class="pc__meta"><span>Active</span><span>OCA Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p2.jpg" style="--ph:#7f8f6a"></div></div>
+            <h3>Crowe River</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>Crowe River property is part of a growing network of protected areas and helps build the spine of a key north-south conservation corridor.</p>
+            <a class="btn" href="#">Read more</a>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="proj__pager">
+      <button class="arrow arrow--prev" id="prev" aria-label="Previous projects" disabled><svg viewBox="0 0 28 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M28 6H1M6 1 1 6l5 5"/></svg></button>
+      <span id="pg">1/2</span>
+      <button class="arrow arrow--next" id="next" aria-label="Next projects"><svg viewBox="0 0 28 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M0 6h27M22 1l5 5-5 5"/></svg></button>
+    </div>
+    <a class="btn proj__all" href="#">View all projects</a>
+  </section>
+
+  <section class="news" id="news">
+    <img class="news__topo" src="assets/topo/news.svg" alt="" width="1440" height="1598">
+    <h2 class="disp abs">News</h2>
+    <div class="shot s1"></div>
+    <div class="shot s2"></div>
+    <div class="shot s3"></div>
+    <div class="shot s4"></div>
+    <a class="btn news__btn" href="#">Read more on LinkedIn</a>
+  </section>
+
+  <footer class="foot" id="footer">
+    <div class="ln h" style="left:0;right:0;top:1px"></div>
+    <div class="ln v" style="left:4.8rem;top:0;bottom:0"></div>
+    <div class="ln v" style="left:9.15rem;top:0;bottom:0"></div>
+
+    <div class="badge img nolabel abs" data-src="assets/badge.png"></div>
+    <p class="abs" style="left:.4rem;top:1.71rem;width:3.25rem">Accelerating conservation across Ontario by bringing together the partnerships, funding, expertise and innovative approaches needed to protect and steward natural landscapes.</p>
+    <p class="abs" style="left:.4rem;top:3.86rem;width:3.55rem;font-weight:600">Copyright © 2026 Ontario Conservation Accelerator<br>All Rights Reserved Policy</p>
+
+    <h3 class="foot__t abs" style="left:5rem;top:.34rem;width:2.64rem">Let’s explore what's possible, together</h3>
+    <p class="abs" style="left:5rem;top:1.14rem;width:2.97rem">Whether you’re looking to invest, have a conservation opportunity or aren’t sure what comes next for your project, our team will take the time to understand your goals and work with you to find the way forward.</p>
+    <a class="btn btn--navy abs" style="left:5rem;top:2.3rem" href="#">Connect</a>
+    <div class="ln h" style="left:4.8rem;top:3.71rem;width:4.35rem"></div>
+    <a class="abs" href="#" style="left:5.06rem;top:4.01rem;font:500 .16rem/1.4 var(--f-mono);letter-spacing:-.02em;color:var(--navy);text-decoration:none;text-transform:uppercase">Find us on LinkedIn</a>
+
+    <h3 class="foot__t abs" style="left:9.53rem;top:.34rem">Contact us</h3>
+    <p class="abs" style="left:9.53rem;top:.76rem;width:3.44rem;line-height:1.3">Let’s connect on your vision for conservation in Ontario</p>
+    <div class="lbl abs" style="left:9.53rem;top:1.19rem">Name</div>
+    <label class="fld" style="left:9.53rem;top:1.36rem;width:2.16rem"><input type="text" aria-label="First name"><span>First</span></label>
+    <label class="fld" style="left:11.84rem;top:1.36rem;width:2.16rem"><input type="text" aria-label="Last name"><span>Last</span></label>
+    <div class="lbl abs" style="left:9.53rem;top:2.14rem">Email</div>
+    <label class="fld" style="left:9.53rem;top:2.35rem;width:4.47rem"><input type="email" aria-label="Email"></label>
+    <div class="lbl abs" style="left:9.53rem;top:2.93rem">Message</div>
+    <label class="fld" style="left:9.53rem;top:3.13rem;width:4.47rem"><textarea aria-label="Message"></textarea></label>
+    <a class="btn btn--navy abs" style="left:13.25rem;top:3.95rem" href="#">Submit</a>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  root.classList.add('js');
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* images: use the file if it exists, otherwise keep the placeholder */
+  document.querySelectorAll('[data-src]').forEach(function(el){
+    var im=new Image();
+    im.onload=function(){
+      el.classList.add('has');
+      if(el.dataset.bg){el.style.setProperty('--bg-img','url("'+el.dataset.src+'")');}
+      else{el.style.backgroundImage='url("'+el.dataset.src+'")';}
+    };
+    im.src=el.dataset.src;
+  });
+
+  /* nav: expanded at top, compact bar after a little scroll, hidden once past the hero, back on scroll up or hover at top */
+  var nav=document.getElementById('nav'),hero=document.getElementById('hero');
+  var last=scrollY,away=false;
+  function setAway(a){if(a!==away){away=a;nav.classList.toggle('is-away',a);}}
+  function pastHero(){return scrollY>hero.offsetHeight-2.3*parseFloat(getComputedStyle(root).fontSize);}
+  function onScroll(){
+    var y=scrollY,dy=y-last;last=y;
+    nav.classList.toggle('is-compact',y>30);
+    if(!pastHero())setAway(false);
+    else if(dy<-3)setAway(false);
+    else if(dy>3)setAway(true);
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('mousemove',function(e){if(away&&e.clientY<60&&pastHero())setAway(false);},{passive:true});
+  onScroll();
+
+  /* section reveals */
+  function on(el,fn){
+    if(reduce){el.classList.add('on');if(fn)fn();return;}
+    var done=false;
+    function check(){
+      if(done)return;
+      var r=el.getBoundingClientRect();
+      if(r.top<innerHeight*(el.dataset.at||.55)&&r.bottom>0){done=true;el.classList.add('on');if(fn)fn();removeEventListener('scroll',check);}
+    }
+    addEventListener('scroll',check,{passive:true});check();
+  }
+  on(document.getElementById('connect'));
+  on(document.getElementById('projects'),null);
+
+  function fmt(v,dec){return v.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});}
+  function count(el,delay){
+    var to=parseFloat(el.dataset.to),dec=+el.dataset.dec||0,pre=el.dataset.pre||'',suf=el.dataset.suf||'';
+    if(reduce)return;
+    el.textContent=pre+fmt(0,dec)+suf;
+    setTimeout(function(){
+      var t0=performance.now(),dur=1100;
+      (function step(ts){
+        var p=Math.min(1,(ts-t0)/dur),e=1-Math.pow(1-p,3);
+        el.textContent=pre+fmt(to*e,dec)+suf;
+        if(p<1)requestAnimationFrame(step);
+      })(t0);
+    },delay);
+  }
+  on(document.getElementById('impact'),function(){
+    document.querySelectorAll('.bar').forEach(function(b){
+      var d=parseFloat(b.style.getPropertyValue('--d'))||0;
+      count(b.querySelector('.bar__n'),d+350);
+    });
+  });
+
+  /* projects carousel: pages of four cards, last page ends flush with the right margin */
+  var track=document.getElementById('track'),prev=document.getElementById('prev'),next=document.getElementById('next'),pg=document.getElementById('pg'),page=0,pages=1,step=0,maxShift=0;
+  function measure(){
+    var cs=track.children,sec=document.getElementById('projects');
+    var margin=track.parentNode.getBoundingClientRect().left;
+    var pitch=cs.length>1?cs[1].getBoundingClientRect().left-cs[0].getBoundingClientRect().left:cs[0].getBoundingClientRect().width;
+    var tw=(cs.length-1)*pitch+cs[cs.length-1].getBoundingClientRect().width;
+    maxShift=Math.max(0,tw+2*margin-sec.clientWidth);
+    step=4*pitch;
+    pages=maxShift>0?Math.ceil(maxShift/step-0.001)+1:1;
+  }
+  function go(p){
+    measure();
+    page=Math.max(0,Math.min(pages-1,p));
+    var shift=Math.min(page*step,maxShift);
+    track.style.transform=shift?'translateX('+(-shift)+'px)':'none';
+    prev.disabled=page===0;next.disabled=page>=pages-1;pg.textContent=(page+1)+'/'+pages;
+  }
+  prev.addEventListener('click',function(){go(page-1);});
+  next.addEventListener('click',function(){go(page+1);});
+  addEventListener('resize',function(){go(page);});
+  go(0);
+})();
+</script>
+
+</body>
+</html>
