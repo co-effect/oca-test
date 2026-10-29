@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Land’escapes | OCA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@200;500;700&family=IBM+Plex+Sans:wght@300;400;600&family=Overpass+Mono:wght@300;400;500;700&display=swap">
+<style>
+/* Layout concept: Figma desktop frame (1440) scaled fluidly. 1rem = 100 design px, so .54rem = 54px at 1440 wide. */
+:root{
+  --ink:#1c1f26; --navy:#293952; --cream:#fff2d2; --orange:#e84826; --stone:#e5e2da; --grey:#6b7280; --white:#ffffff; --bg:#ffffff;
+  --f-disp:'Barlow Condensed','Arial Narrow',sans-serif;
+  --f-body:'IBM Plex Sans',system-ui,sans-serif;
+  --f-mono:'Overpass Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.65,0,.35,1);
+  --out:cubic-bezier(.16,1,.3,1);
+}
+html{font-size:calc(100vw / 14.4);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:.14rem;overflow-x:clip;-webkit-font-smoothing:antialiased}
+*,*::before,*::after{box-sizing:border-box}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+
+/* shared */
+.disp{font-family:var(--f-disp);font-weight:700;text-transform:uppercase;font-size:.54rem;line-height:.54rem}
+.abs{position:absolute}
+.img{position:relative;background:var(--ph,#b9b5a8) center/cover no-repeat}
+.img.has{background-color:transparent}
+.img:not(.has)::after{content:attr(data-src);position:absolute;left:.1rem;bottom:.08rem;font:400 .11rem var(--f-mono);color:rgba(255,255,255,.75);letter-spacing:.02em}
+.img.nolabel::after{display:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:.36rem;padding:0 .15rem;border:1px solid currentColor;font:500 .12rem/1.4 var(--f-mono);letter-spacing:-.02em;text-transform:uppercase;color:var(--ink);background:transparent;text-decoration:none;white-space:nowrap;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.btn:hover{background:var(--ink);color:var(--white)}
+.btn--navy{color:var(--navy)}
+.btn--navy:hover{background:var(--navy)}
+.btn--cream{color:var(--cream)}
+.btn--cream:hover{background:var(--cream);color:var(--ink)}
+
+/* reveal helper (only active when JS runs) */
+.js .rv{opacity:0;transform:translateY(.18rem);transition:opacity .9s var(--out),transform .9s var(--out);transition-delay:calc(var(--d,0) * 1ms)}
+.js .on .rv,.js .rv.on{opacity:1;transform:none}
+
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:0 .4rem;pointer-events:none;transition:transform .6s var(--ease)}
+.nav.is-away{transform:translateY(-140%)}
+.nav__panel{pointer-events:auto;position:relative;margin-top:.27rem;height:3.61rem;background:var(--ink);overflow:hidden;transition:height .75s var(--ease),margin-top .75s var(--ease)}
+.nav.is-compact .nav__panel{height:.62rem;margin-top:.12rem}
+.nav__row{position:absolute;top:0;left:0;right:0;height:.62rem;display:flex;align-items:center;justify-content:space-between;padding:0 .26rem 0 .08rem;z-index:2}
+.logo{display:block;width:1.38rem;height:.43rem;text-decoration:none;color:var(--white);background-size:contain;background-repeat:no-repeat;background-position:left center}
+.logo__txt{font:700 .3rem/.43rem var(--f-disp);letter-spacing:.06em}
+.logo.has .logo__txt{display:none}
+.logo.img::after{display:none}
+.nav__links{display:flex;gap:.52rem}
+.nav__links a{font:400 .12rem/1.4 var(--f-body);letter-spacing:.02em;text-transform:uppercase;color:var(--white);text-decoration:none;position:relative}
+.nav__links a::after{content:"";position:absolute;left:0;right:0;bottom:-.04rem;height:1px;background:var(--cream);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--out)}
+.nav__links a:hover::after{transform:scaleX(1)}
+.nav__h,.nav__p,.nav__btn,.nav__topo{transition:opacity .35s}
+.nav.is-compact .nav__h,.nav.is-compact .nav__p,.nav.is-compact .nav__btn,.nav.is-compact .nav__topo{opacity:0;pointer-events:none}
+.nav__topo{position:absolute;right:0;bottom:0;width:4.02rem;height:3.05rem;display:block;pointer-events:none}
+.nav__h{position:absolute;left:.25rem;top:1.44rem;width:9.93rem;font:700 .64rem/.64rem var(--f-disp);text-transform:uppercase;color:var(--cream)}
+.nav__p{position:absolute;left:.25rem;top:2.89rem;width:7.49rem;font:300 .18rem/1.4 var(--f-body);color:var(--white)}
+.nav__btn{position:absolute;right:.26rem;top:2.97rem}
+
+/* ---------- PROJECTS ---------- */
+.proj{--q:1rem;position:relative;height:10.46rem;background:var(--white);overflow:hidden}
+.proj h2{left:.4rem;top:1.11rem}
+.proj__vp{position:absolute;left:.4rem;top:2.42rem;right:0}
+.proj__track{display:flex;width:max-content;transition:transform .9s var(--ease)}
+.pc{position:relative;width:calc(3.78 * var(--q));margin-right:-1px;padding-top:calc(.31 * var(--q))}
+.pc__meta{position:absolute;left:0;top:0;height:calc(.32 * var(--q));display:flex;align-items:stretch;background:var(--white);border:1px solid rgba(107,114,128,.5);font:400 calc(.14 * var(--q))/1 var(--f-mono);letter-spacing:-.02em;text-transform:uppercase;z-index:2}
+.pc__meta span{display:flex;align-items:center;padding:0 calc(.2 * var(--q));white-space:nowrap}
+.pc__meta span:first-child{padding-left:calc(.17 * var(--q))}
+.pc__meta span:last-child{padding-right:calc(.17 * var(--q))}
+.pc__meta span+span{border-left:1px solid rgba(107,114,128,.5)}
+.pc__card{position:relative;height:calc(5.53 * var(--q));background:var(--white);border:1px solid rgba(107,114,128,.5);padding:calc(.16 * var(--q)) calc(.17 * var(--q)) 0;cursor:pointer}
+.pc__frame{width:calc(3.43 * var(--q));aspect-ratio:343/201;overflow:hidden}
+.pc__frame .img{width:100%;height:100%;transition:transform .9s var(--out)}
+.pc__card:hover .pc__frame .img{transform:scale(1.09)}
+.pc__card h3{margin-top:calc(.11 * var(--q));font:600 calc(.26 * var(--q))/1.4 var(--f-body)}
+.pc__stat{margin-top:calc(.14 * var(--q));height:calc(.448 * var(--q));font:300 calc(.16 * var(--q))/1.4 var(--f-mono);text-transform:uppercase}
+.pc__stat b{font-weight:700;color:var(--orange)}
+.pc__card p{margin-top:calc(.14 * var(--q));width:calc(2.85 * var(--q));font:300 calc(.14 * var(--q))/1.4 var(--f-body)}
+.pc__card .btn{position:absolute;left:calc(.17 * var(--q));bottom:calc(.185 * var(--q))}
+.pc__card:hover .btn{background:var(--ink);color:var(--white)}
+.proj__pager{position:absolute;left:0;right:0;top:8.55rem;display:flex;justify-content:center;align-items:center;gap:.2rem;font:400 .16rem/1 var(--f-mono)}
+.arrow{width:.4rem;height:.3rem;border:0;background:none;padding:0;color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:transform .25s var(--out),opacity .25s}
+.arrow svg{width:.28rem;height:.12rem;overflow:visible}
+.arrow:hover{transform:translateX(.04rem)}
+.arrow--prev:hover{transform:translateX(-.04rem)}
+.arrow[disabled]{opacity:.25;cursor:default;transform:none}
+.proj__all{position:absolute;left:50%;top:9.09rem;transform:translateX(-50%)}
+
+/* ---------- FOOTER ---------- */
+.foot{position:relative;height:4.52rem;background:var(--white);overflow:clip}
+.foot .ln{position:absolute;background:rgba(28,31,38,.55)}
+.foot .h{height:1px}.foot .v{width:1px}
+.badge{left:.4rem;top:.34rem;width:1.26rem;height:1.26rem;border-radius:50%;--ph:radial-gradient(circle,#1c1f26 0 40%,#e84826 41% 46%,#fff2d2 47% 52%,#293952 53% 100%)}
+.foot__t{font:700 .32rem/.32rem var(--f-disp);text-transform:uppercase}
+.foot p{font:400 .14rem/1.4 var(--f-body)}
+.foot .lbl{font:500 .14rem/1.3 var(--f-mono);letter-spacing:-.02em;text-transform:uppercase}
+.li{position:absolute;left:4.81rem;top:3.72rem;width:4.34rem;height:.8rem;padding:.29rem 0 0 .25rem;font:500 .16rem/1.4 var(--f-mono);letter-spacing:-.02em;color:var(--navy);text-decoration:none;text-transform:uppercase;transition:background .3s var(--out),color .3s var(--out)}
+.li:hover,.li:focus-visible{background:var(--navy);color:var(--white)}
+.fld{position:absolute;display:block}
+.fld input,.fld textarea{display:block;width:100%;border:0;border-bottom:1px solid rgba(28,31,38,.55);background:transparent;padding:0;font:400 .14rem/1.3 var(--f-body);color:var(--ink);border-radius:0;outline:none;resize:none}
+.fld input{height:.3rem}
+.fld textarea{height:.58rem}
+.fld input:focus,.fld textarea:focus{border-bottom-color:var(--orange)}
+.fld input::placeholder,.fld textarea::placeholder{font-style:italic;color:var(--ink);opacity:.3}
+.fld span{display:block;margin-top:.04rem;font:400 .12rem/1.3 var(--f-body);color:var(--grey)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important;transition-delay:0s!important}
+}
+
+/* ---------- PROJECT PAGE ---------- */
+.nav--page .nav__panel{height:.63rem;margin-top:.27rem}
+.phead{position:relative;height:4.76rem;overflow:hidden;background:#33402b}
+.phead__bg{position:absolute;left:-.15rem;right:-.15rem;top:0;bottom:0;background-position:center}
+.phead__bg.has{background-image:var(--bg-img)}
+.phead__band{position:absolute;left:0;right:0;top:3.71rem;height:1.05rem;background:rgba(28,31,38,.3);-webkit-backdrop-filter:blur(.155rem);backdrop-filter:blur(.155rem)}
+.phead h1{position:absolute;left:.4rem;top:3.88rem;font:700 .48rem/.64rem var(--f-disp);text-transform:uppercase;color:#fff;white-space:nowrap}
+
+.res{position:relative;height:24.67rem;background:var(--white)}
+.side{position:sticky;top:0;margin-left:10.09rem;width:4.31rem;height:8.66rem;z-index:2}
+.side__navy{position:absolute;left:.01rem;top:0;width:4.3rem;height:2.52rem;background:var(--navy)}
+.side .vl{position:absolute;left:0;top:0;width:1px;height:8.66rem;background:rgba(107,114,128,.55)}
+.side .hl{position:absolute;left:0;right:0;height:1px;background:rgba(107,114,128,.55)}
+.side .hl.w{background:rgba(255,255,255,.28)}
+.side .lbl,.side .val{position:absolute;left:.26rem;width:3rem;margin:0}
+.side .lbl{font:700 .18rem/1.3 var(--f-mono);text-transform:uppercase;color:var(--ink)}
+.side .val{font:400 .18rem/1.3 var(--f-body);color:var(--ink)}
+.side .on-navy{color:#fff}
+.side .logo1{position:absolute;left:.08rem;top:6.48rem;width:1.82rem;height:.91rem}
+.side .logo2{position:absolute;left:.26rem;top:7.53rem;width:1.55rem;height:.69rem}
+.side .logo1.img,.side .logo2.img{background-size:contain;background-repeat:no-repeat;background-position:left center}
+.res__c{position:absolute;margin:0}
+.res__lead{left:.4rem;top:.54rem;width:8.68rem;font:400 .22rem/1.4 var(--f-body);letter-spacing:-.01em}
+.res__img{left:.4rem;top:3.34rem;width:9rem;height:4.27rem;overflow:hidden}
+.res__img .img{position:absolute;inset:0}
+.copy{left:.4rem;width:8.68rem;font:400 .16rem/1.4 var(--f-body);letter-spacing:-.01em}
+.copy h2{font:700 .24rem/1.4 var(--f-disp);text-transform:uppercase;margin-bottom:.08rem;letter-spacing:0}
+.copy p+p{margin-top:.14rem}
+.imp__h{left:.41rem;top:14.49rem;font:700 .24rem/1.4 var(--f-disp);text-transform:uppercase;letter-spacing:-.01em}
+.ibox{position:absolute;top:15.02rem;width:2.18rem;height:2.09rem;background:var(--stone)}
+.js .ibox{clip-path:inset(100% 0 0 0);transition:clip-path .85s var(--ease);transition-delay:calc(var(--d) * 1ms)}
+.js .imp.on .ibox{clip-path:inset(0 0 0 0)}
+.ibox b{position:absolute;left:.15rem;top:.08rem;font:700 .54rem/1 var(--f-disp);text-transform:uppercase;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ibox span{position:absolute;left:.15rem;bottom:.12rem;width:1.4rem;font:400 .16rem/1.3 var(--f-body);letter-spacing:-.02em}
+.js .ibox b,.js .ibox span{opacity:0;transition:opacity .6s var(--out);transition-delay:calc((var(--d) + 350) * 1ms)}
+.js .imp.on .ibox b,.js .imp.on .ibox span{opacity:1}
+.quote__topo{left:.41rem;top:18.59rem;width:2.09rem;height:5.18rem;overflow:hidden}
+.quote__topo img{display:block;width:100%;height:100%}
+.quote__box{left:1.35rem;top:18.89rem;width:8.05rem;height:4.58rem;background:var(--navy)}
+.quote__q{left:1.66rem;top:19.14rem;width:7.02rem;font:400 .24rem/1.4 var(--f-body);letter-spacing:-.01em;color:#fff}
+.quote__ph{left:1.66rem;top:22.07rem;width:1.08rem;height:1.08rem;--ph:#6f8570}
+.quote__n{left:2.89rem;top:22.07rem;width:1.61rem;font:600 .18rem/1.4 var(--f-body);color:#fff;letter-spacing:-.01em}
+.quote__r{left:2.89rem;top:22.81rem;width:1.85rem;font:300 .14rem/1.2 var(--f-body);color:#fff}
+.js .quote__topo,.js .quote__box,.js .quote__q,.js .quote__ph,.js .quote__n,.js .quote__r{opacity:0;transform:translateY(.16rem);transition:opacity .9s var(--out),transform .9s var(--out)}
+.js .quote__box{transition-delay:.1s}.js .quote__q{transition-delay:.35s}.js .quote__ph,.js .quote__n,.js .quote__r{transition-delay:.55s}
+.js .quote.on .quote__topo,.js .quote.on .quote__box,.js .quote.on .quote__q,.js .quote.on .quote__ph,.js .quote.on .quote__n,.js .quote.on .quote__r{opacity:1;transform:none}
+
+.more{--q:1rem;position:relative;height:8.43rem;background:var(--stone);overflow:hidden}
+.more h2{left:.4rem;top:.75rem}
+.more .proj__vp{left:1.73rem;top:1.95rem;right:auto}
+.more .proj__track{transition:none}
+.more .pc__meta,.more .pc__card{background:var(--stone)}
+</style>
+</head>
+<body>
+
+<header class="nav nav--page is-compact" id="nav" data-static="1">
+  <div class="nav__panel">
+    <div class="nav__row">
+      <a class="logo img" href="index.html" data-src="assets/logo.png" aria-label="OCA home"><span class="logo__txt">OCA</span></a>
+      <nav class="nav__links" aria-label="Main">
+        <a href="index.html">Who We Are</a>
+        <a href="index.html#help">What We Do</a>
+        <a href="index.html#help">How We Can Help</a>
+        <a href="projects.html">Projects</a>
+        <a href="index.html#connect">Support Conversation</a>
+      </nav>
+    </div>
+  </div>
+</header>
+<main id="top">
+  <section class="phead" id="hero">
+    <div class="phead__bg img nolabel" data-src="assets/ph.jpg" data-bg="1" style="--ph:linear-gradient(180deg,#1f4a2e,#0d5a5c)"></div>
+    <div class="phead__band"></div>
+    <h1>Land’escapes</h1>
+  </section>
+
+  <section class="res" id="resources">
+    <aside class="side" aria-label="Project facts">
+      <div class="side__navy"></div>
+      <div class="vl"></div>
+      <div class="hl w" style="top:.74rem"></div>
+      <div class="hl w" style="top:1.43rem"></div>
+      <div class="hl" style="top:2.52rem"></div>
+      <div class="hl" style="top:3.6rem"></div>
+      <div class="hl" style="top:4.68rem"></div>
+      <div class="hl" style="top:5.76rem"></div>
+      <div class="hl" style="top:8.66rem"></div>
+      <p class="lbl on-navy" style="top:.264rem">OCA Led</p>
+      <p class="lbl on-navy" style="top:1.005rem;width:3.4rem">Completed October 23, 2024</p>
+      <p class="lbl on-navy" style="top:1.735rem">Area Protected</p>
+      <p class="val on-navy" style="top:2.05rem;width:3.4rem">10,643 hectares (26,300 acres)</p>
+      <p class="lbl" style="top:2.831rem">Key Species</p>
+      <p class="val" style="top:3.146rem;width:3.4rem">Blanding’s turtle, Canada warbler</p>
+      <p class="lbl" style="top:3.927rem">Nearest Town</p>
+      <p class="val" style="top:4.242rem">Coe Hill</p>
+      <p class="lbl" style="top:5.023rem">Project Lead</p>
+      <p class="val" style="top:5.338rem">Ben Samann &amp; OCA</p>
+      <p class="lbl" style="top:6.119rem">Project Partners</p>
+      <div class="logo1 img" data-src="assets/logo-landescapes.png" style="--ph:#e9e5db"></div>
+      <div class="logo2 img" data-src="assets/logo-clean50.png" style="--ph:#e9e5db"></div>
+    </aside>
+
+    <p class="res__c res__lead">Located just south of Bancroft, Ontario, the Land’escapes property spans an extraordinary 26,300 acres. The land, home to 20 untouched lakes, over 5,000 acres of wetlands, and 13 species at risk, has been formally recognized in the Canadian Protected and Conserved Areas Database—making it the largest individually-owned protected area in both Ontario and Canada. Owner Ben Samann is dedicated to ensuring this site will be managed for conservation for the long term through partnerships and strategic conservation-focused management plans. The property safeguards portions of two vital wildlife corridors and will serve as an anchor for future conservation throughout this region.</p>
+    <div class="res__c res__img"><div class="img nolabel" data-src="assets/post.jpg" style="--ph:#7a9168"></div></div>
+
+    <div class="res__c copy" style="top:7.93rem">
+      <h2>Opportunity</h2>
+      <p>The Land’escapes property, just south of Bancroft, Ontario, spans an incredible 26,300 acres (10,643 hectares) – twice the size of Frontenac Provincial Park. It is home to 20 completely undeveloped lakes, 13 species at risk (including the Canada warbler, and Blanding’s turtle), has over 5,000 acres of pristine wetlands, and provided habitat for wide-ranging mammals including moose, bear and elk.</p>
+      <p>The Land’escapes property, fondly referred to as “The Park” by owner Ben Samann, has been recognized as the largest protected area owned by an individual in Ontario, and Canada. The designation “protected area” is the same as that given to a provincial park or a private nature reserve. The Park has been entered into the Canadian Protected and Conserved Areas Database, meaning it is contributing to Canada’s target of protecting 30% of its lands and waters by 2030. The formal recognition of protected and conserved areas, without the need for a conservation entity or government to acquire title or rights to the land, is an innovative conservation tool that is significantly accelerating the pace and scale of conservation in Ontario and Canada.</p>
+    </div>
+    <div class="res__c copy" style="top:11.21rem">
+      <h2>Solution</h2>
+      <p>Ben acquired the site in 2021 from a U.S.-based forestry company, with a vision to conserve, restore, and conduct leading edge research on the land. In coordination with conservation partners such as Ontario Conservation Accelerator, Blazing Star Environmental, and the University of Guelph, the land has undergone detailed management planning and inventory. These partnerships, in addition to conservation-focused property and forest management plans, municipal zoning recognizing environmentally sensitive and significant wildlife areas within the property, and long term planning for the property to remain in conservation beyond the life of the current owner all help ensure this site will be provide conservation outcomes for the long term.</p>
+      <p>This property plays a vital role in protecting two of Ontario’s most important wildlife corridors – The Land Between corridor and the Algonquin to Adirondack corridor. It will serve as an anchor for future conservation efforts in this region. Additionally, The Park aims to play a tangible role in reconciliation with First Nations, as the lands are available to access for Indigenous people upon request to Land’escapes Indigenous Engagement Coordinator.</p>
+    </div>
+
+    <div class="imp" id="impact" data-at=".6" style="position:absolute;left:0;top:14.49rem;width:10rem;height:3.4rem">
+      <p class="res__c imp__h" style="left:.41rem;top:0">Impact</p>
+      <div class="ibox" style="left:.41rem;top:.53rem;--d:0"><b data-to="15.5" data-dec="1" data-pre="$" data-suf="M">$15.5M</b><span>Multi-year private funding secured</span></div>
+      <div class="ibox" style="left:2.68rem;top:.53rem;--d:130"><b data-to="25511">25,511</b><span>Acres of Crown land added to provincial parks</span></div>
+      <div class="ibox" style="left:4.95rem;top:.53rem;--d:260"><b data-to="5000" data-suf="+">5,000+</b><span>Acres protected</span></div>
+      <div class="ibox" style="left:7.22rem;top:.53rem;--d:390"><b data-to="100" data-suf="+">100+</b><span>Organizations connected</span></div>
+    </div>
+    <p class="res__c copy" style="top:17.43rem;font-size:.16rem">Ontario Conservation Accelerator is proud to have partnered with Ben Samann in recognizing his property as a protected area. The support from the provincial and federal government was crucial to make this project possible.</p>
+
+    <div class="quote" id="quote" data-at=".7" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none">
+      <div class="res__c quote__topo"><img src="assets/topo/quote.svg" alt="" width="209" height="518"></div>
+      <div class="res__c quote__box"></div>
+      <p class="res__c quote__q">“Working with Jill, Mike, Kristyn and the rest of the Ontario Conservation Accelerator team has been tremendously productive and rewarding. They understand how to get things done and have both inspiring and practical advice to offer. As smaller land trusts are looking to have greater impact, OCA helps build out a big picture vision. The team embodies that spirit of collaboration that is needed like never before to accelerate conservation.”</p>
+      <div class="res__c quote__ph img nolabel" data-src="assets/quote.jpg"></div>
+      <p class="res__c quote__n">Wendy Cridland</p>
+      <p class="res__c quote__r">Executive Director<br>Long Point Basin Land Trust</p>
+    </div>
+  </section>
+
+  <section class="more" id="more" data-at=".8">
+    <h2 class="disp abs rv" style="--d:0">More Projects</h2>
+    <div class="proj__vp">
+      <div class="proj__track">
+        <article class="pc rv" style="--d:100">
+          <div class="pc__meta"><span>Active</span><span>OCA Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p1.jpg" style="--ph:#6d8a7a"></div></div>
+            <h3>Scouts Canada</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>With programming rooted in adventure, leadership, and community, Scouts Canada provides transformative learning experiences for youth through outdoor experiential education, and service.</p>
+            <a class="btn" href="#">Read more</a>
+          </div>
+        </article>
+<article class="pc rv" style="--d:220">
+          <div class="pc__meta"><span>Active</span><span>OCA Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p2.jpg" style="--ph:#7f8f6a"></div></div>
+            <h3>Crowe River</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>Crowe River property is part of a growing network of protected areas and helps build the spine of a key north-south conservation corridor.</p>
+            <a class="btn" href="#">Read more</a>
+          </div>
+        </article>
+<article class="pc rv" style="--d:340">
+          <div class="pc__meta"><span>Completed</span><span>Oct 23, 2024</span><span>OCA Led</span></div>
+          <div class="pc__card">
+            <div class="pc__frame"><div class="img" data-src="assets/p3.jpg" style="--ph:#4f8a8c"></div></div>
+            <h3>Land’escapes</h3>
+            <div class="pc__stat"><b>10,643</b><br>hectares protected</div>
+            <p>Located just south of Bancroft, Ontario, the Land’escapes property spans an extraordinary 26,300 acres.</p>
+            <a class="btn" href="projects.html">Read more</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot" id="footer">
+    <div class="ln h" style="left:0;right:0;top:1px"></div>
+    <div class="ln v" style="left:4.8rem;top:0;bottom:0"></div>
+    <div class="ln v" style="left:9.15rem;top:0;bottom:0"></div>
+
+    <div class="badge img nolabel abs" data-src="assets/badge.png"></div>
+    <p class="abs" style="left:.4rem;top:1.71rem;width:3.25rem">Accelerating conservation across Ontario by bringing together the partnerships, funding, expertise and innovative approaches needed to protect and steward natural landscapes.</p>
+    <p class="abs" style="left:.4rem;top:3.86rem;width:3.55rem;font-weight:600">Copyright © 2026 Ontario Conservation Accelerator<br>All Rights Reserved Policy</p>
+
+    <h3 class="foot__t abs" style="left:5rem;top:.34rem;width:2.64rem">Let’s explore what's possible, together</h3>
+    <p class="abs" style="left:5rem;top:1.14rem;width:2.97rem">Whether you’re looking to invest, have a conservation opportunity or aren’t sure what comes next for your project, our team will take the time to understand your goals and work with you to find the way forward.</p>
+    <a class="btn btn--navy abs" style="left:5rem;top:2.3rem" href="#">Connect</a>
+    <div class="ln h" style="left:4.8rem;top:3.71rem;width:4.35rem"></div>
+    <a class="li" href="#">Find us on LinkedIn</a>
+
+    <h3 class="foot__t abs" style="left:9.53rem;top:.34rem">Contact us</h3>
+    <p class="abs" style="left:9.53rem;top:.76rem;width:3.44rem;line-height:1.3">Let’s connect on your vision for conservation in Ontario</p>
+    <div class="lbl abs" style="left:9.53rem;top:1.19rem">Name</div>
+    <label class="fld" style="left:9.53rem;top:1.36rem;width:2.16rem"><input type="text" aria-label="First name" placeholder="John"><span>First</span></label>
+    <label class="fld" style="left:11.84rem;top:1.36rem;width:2.16rem"><input type="text" aria-label="Last name" placeholder="Smith"><span>Last</span></label>
+    <div class="lbl abs" style="left:9.53rem;top:2.14rem">Email</div>
+    <label class="fld" style="left:9.53rem;top:2.35rem;width:4.47rem"><input type="email" aria-label="Email" placeholder="johnsmith@gmail.com"></label>
+    <div class="lbl abs" style="left:9.53rem;top:2.93rem">Message</div>
+    <label class="fld" style="left:9.53rem;top:3.13rem;width:4.47rem"><textarea aria-label="Message" placeholder="Enter your message here..."></textarea></label>
+    <a class="btn btn--navy abs" style="left:13.25rem;top:3.95rem" href="#">Submit</a>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  root.classList.add('js');
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-src]').forEach(function(el){
+    var im=new Image();
+    im.onload=function(){
+      el.classList.add('has');
+      if(el.dataset.bg){el.style.setProperty('--bg-img','url("'+el.dataset.src+'")');}
+      else{el.style.backgroundImage='url("'+el.dataset.src+'")';}
+    };
+    im.src=el.dataset.src;
+  });
+  var nav=document.getElementById('nav'),hero=document.getElementById('hero');
+  var last=scrollY,away=false;
+  function setAway(a){if(a!==away){away=a;nav.classList.toggle('is-away',a);}}
+  function pastHero(){return scrollY>1.2*parseFloat(getComputedStyle(root).fontSize);}
+  function onScroll(){
+    var y=scrollY,dy=y-last;last=y;
+    if(!pastHero())setAway(false);
+    else if(dy<-3)setAway(false);
+    else if(dy>3)setAway(true);
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('mousemove',function(e){if(away&&e.clientY<60&&pastHero())setAway(false);},{passive:true});
+  onScroll();
+  function on(el,fn){
+    if(reduce){el.classList.add('on');if(fn)fn();return;}
+    var done=false;
+    function check(){
+      if(done)return;
+      var r=el.getBoundingClientRect();
+      if(r.top<innerHeight*(el.dataset.at||.6)&&r.bottom>0){done=true;el.classList.add('on');if(fn)fn();removeEventListener('scroll',check);}
+    }
+    addEventListener('scroll',check,{passive:true});check();
+  }
+  function fmt(v,dec){return v.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});}
+  function count(el,delay){
+    var to=parseFloat(el.dataset.to),dec=+el.dataset.dec||0,pre=el.dataset.pre||'',suf=el.dataset.suf||'';
+    if(reduce)return;
+    el.textContent=pre+fmt(0,dec)+suf;
+    setTimeout(function(){
+      var t0=performance.now(),dur=1100;
+      (function step(ts){
+        var p=Math.min(1,(ts-t0)/dur),e=1-Math.pow(1-p,3);
+        el.textContent=pre+fmt(to*e,dec)+suf;
+        if(p<1)requestAnimationFrame(step);
+      })(t0);
+    },delay);
+  }
+  on(document.getElementById('impact'),function(){
+    document.querySelectorAll('.ibox').forEach(function(b){
+      var d=parseFloat(b.style.getPropertyValue('--d'))||0;
+      count(b.querySelector('b'),d+350);
+    });
+  });
+  on(document.getElementById('quote'));
+  on(document.getElementById('more'));
+  var m=document.getElementById('more');
+})();
+</script>
+</body>
+</html>
